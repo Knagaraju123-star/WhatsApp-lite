@@ -1,4 +1,3 @@
-
 // FIX: Provide full type definitions for the application.
 export type CallType = 'audio' | 'video';
 export type CallDirection = 'incoming' | 'outgoing' | 'missed';

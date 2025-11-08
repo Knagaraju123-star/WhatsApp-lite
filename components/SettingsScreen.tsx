@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { User } from '../types';
 import { BackIcon, QRIcon, LockIcon, ChatIcon, NotificationsIcon, HelpIcon, StarIcon } from './Icons';

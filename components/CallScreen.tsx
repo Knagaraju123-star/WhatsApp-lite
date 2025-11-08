@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { User, CallType } from '../types';
 import { EndCallIcon, SpeakerIcon, MuteIcon, VideoIcon, PhoneIcon } from './Icons';

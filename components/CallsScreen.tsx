@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Call, User, CallType } from '../types';
 import { PhoneIcon, VideoIcon } from './Icons';

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Chat, Message, User, CallType } from '../types';
 import { BackIcon, PhoneIcon, VideoIcon, MoreVertIcon, AttachIcon, SendIcon } from './Icons';

@@ -11,18 +11,21 @@ import ContactProfileScreen from './components/ContactProfileScreen';
 import SettingsScreen from './components/SettingsScreen';
 import AccountSettingsScreen from './components/AccountSettingsScreen';
 import ChatSettingsScreen from './components/ChatSettingsScreen';
+import LoginScreen from './components/LoginScreen';
+import StatusViewScreen from './components/StatusViewScreen';
 import { MoreVertIcon, CameraIcon, SearchIcon } from './components/Icons';
 
 // FIX: Import GoogleGenAI for chatbot functionality.
 import { GoogleGenAI } from "@google/genai";
 
-type Screen = 'main' | 'chat_screen' | 'call_screen' | 'profile_screen' | 'settings' | 'account_settings' | 'chat_settings';
+type Screen = 'main' | 'chat_screen' | 'call_screen' | 'profile_screen' | 'settings' | 'account_settings' | 'chat_settings' | 'status_view';
 type Tab = 'chats' | 'status' | 'calls';
 
 // FIX: Initialize Gemini API client.
 const ai = new GoogleGenAI({apiKey: process.env.API_KEY!});
 
 const App: React.FC = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [screen, setScreen] = useState<Screen>('main');
     const [activeTab, setActiveTab] = useState<Tab>('chats');
     
@@ -34,9 +37,22 @@ const App: React.FC = () => {
     const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [callInfo, setCallInfo] = useState<{user: User; type: CallType} | null>(null);
+    const [viewingStatus, setViewingStatus] = useState<Status | null>(null);
     const [isTyping, setIsTyping] = useState(false);
 
+    useEffect(() => {
+        const loggedInStatus = localStorage.getItem('isLoggedIn');
+        if (loggedInStatus === 'true') {
+            setIsLoggedIn(true);
+        }
+    }, []);
+
     const selectedChat = chats.find(c => c.id === selectedChatId) || null;
+
+    const handleLogin = () => {
+        localStorage.setItem('isLoggedIn', 'true');
+        setIsLoggedIn(true);
+    };
 
     const handleSelectChat = (chatId: number) => {
         setSelectedChatId(chatId);
@@ -138,11 +154,24 @@ const App: React.FC = () => {
         setActiveTab('status');
     };
 
+    const handleViewStatus = (statusToView: Status) => {
+        const isMyStatus = myStatuses.some(s => s.id === statusToView.id);
+        if (!isMyStatus) {
+            const updatedStatuses = statuses.map(s =>
+                s.id === statusToView.id ? { ...s, viewed: true } : s
+            );
+            setStatuses(updatedStatuses);
+        }
+        setViewingStatus(statusToView);
+        setScreen('status_view');
+    };
+
     const handleBack = () => {
-        if (screen === 'chat_screen' || screen === 'profile_screen' || screen === 'settings') {
+        if (screen === 'chat_screen' || screen === 'profile_screen' || screen === 'settings' || screen === 'status_view') {
             setScreen('main');
             setSelectedChatId(null);
             setSelectedUser(null);
+            setViewingStatus(null);
         } else if (screen === 'account_settings' || screen === 'chat_settings') {
             setScreen('settings');
         }
@@ -173,23 +202,29 @@ const App: React.FC = () => {
             </header>
             <main className="flex-1 overflow-y-auto">
                 {activeTab === 'chats' && <ChatListScreen chats={chats} onSelectChat={handleSelectChat} />}
-                {activeTab === 'status' && <StatusScreen myStatuses={myStatuses} contactStatuses={statuses} onUpdateStatus={handleUpdateStatus} />}
+                {activeTab === 'status' && <StatusScreen myStatuses={myStatuses} contactStatuses={statuses} onUpdateStatus={handleUpdateStatus} onViewStatus={handleViewStatus} />}
                 {activeTab === 'calls' && <CallsScreen calls={calls} users={MOCK_USERS} onStartCall={handleStartCall} />}
             </main>
         </div>
     );
 
+    if (!isLoggedIn) {
+        return <LoginScreen onLogin={handleLogin} />;
+    }
+
     if (callInfo) {
         return <CallScreen user={callInfo.user} callType={callInfo.type} onEndCall={handleEndCall} />;
     }
 
-    const screenMap: Record<Screen, JSX.Element | null> = {
+    // FIX: Changed type from `JSX.Element | null` to `React.ReactNode` to fix "Cannot find namespace 'JSX'" error.
+    const screenMap: Record<Screen, React.ReactNode> = {
         'main': renderMainScreen(),
         'chat_screen': selectedChat ? <ChatScreen chat={selectedChat} isTyping={isTyping} onBack={handleBack} onSendMessage={handleSendMessage} onStartCall={handleStartCall} onViewProfile={handleViewProfile} /> : null,
         'profile_screen': selectedUser ? <ContactProfileScreen user={selectedUser} onBack={handleBack} /> : null,
         'settings': <SettingsScreen onBack={handleBack} user={MY_USER} onNavigate={(s) => setScreen(s as Screen)} />,
         'account_settings': <AccountSettingsScreen onBack={handleBack} />,
         'chat_settings': <ChatSettingsScreen onBack={handleBack} />,
+        'status_view': viewingStatus ? <StatusViewScreen status={viewingStatus} onClose={handleBack} /> : null,
         'call_screen': null, // handled separately
     };
 

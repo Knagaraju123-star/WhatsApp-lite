@@ -7,9 +7,10 @@ interface StatusScreenProps {
     myStatuses: Status[];
     contactStatuses: Status[];
     onUpdateStatus: (mediaUrl: string, mediaType: 'image' | 'video') => void;
+    onViewStatus: (status: Status) => void;
 }
 
-const StatusScreen: React.FC<StatusScreenProps> = ({ myStatuses, contactStatuses, onUpdateStatus }) => {
+const StatusScreen: React.FC<StatusScreenProps> = ({ myStatuses, contactStatuses, onUpdateStatus, onViewStatus }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCameraClick = () => {
@@ -27,6 +28,14 @@ const StatusScreen: React.FC<StatusScreenProps> = ({ myStatuses, contactStatuses
       reader.readAsDataURL(file);
     }
   };
+  
+  const handleViewMyStatus = () => {
+    if (myStatuses.length > 0) {
+      onViewStatus(myStatuses[0]);
+    } else {
+      handleCameraClick();
+    }
+  };
 
   const recentUpdates = contactStatuses.filter(s => !s.viewed);
   const viewedUpdates = contactStatuses.filter(s => s.viewed);
@@ -41,7 +50,7 @@ const StatusScreen: React.FC<StatusScreenProps> = ({ myStatuses, contactStatuses
         onChange={handleFileChange}
       />
 
-      <div className="p-4 flex items-center border-b cursor-pointer" onClick={handleCameraClick}>
+      <div className="p-4 flex items-center border-b cursor-pointer" onClick={handleViewMyStatus}>
         <div className="relative">
           <div className={`p-1 rounded-full ${myStatuses.length > 0 ? 'border-2 border-green-500' : ''}`}>
             <img src={MY_USER.avatarUrl} alt="My status" className="w-12 h-12 rounded-full" />
@@ -68,7 +77,7 @@ const StatusScreen: React.FC<StatusScreenProps> = ({ myStatuses, contactStatuses
             Recent updates
           </div>
           {recentUpdates.map((update) => (
-            <div key={update.id} className="p-4 flex items-center border-b cursor-pointer">
+            <div key={update.id} className="p-4 flex items-center border-b cursor-pointer" onClick={() => onViewStatus(update)}>
               <div className="relative p-1 border-2 border-green-500 rounded-full">
                 <img src={update.user.avatarUrl} alt={update.user.name} className="w-12 h-12 rounded-full" />
               </div>
@@ -87,7 +96,7 @@ const StatusScreen: React.FC<StatusScreenProps> = ({ myStatuses, contactStatuses
             Viewed updates
           </div>
           {viewedUpdates.map((update) => (
-            <div key={update.id} className="p-4 flex items-center border-b cursor-pointer">
+            <div key={update.id} className="p-4 flex items-center border-b cursor-pointer" onClick={() => onViewStatus(update)}>
               <div className="relative p-1 border-2 border-gray-400 rounded-full">
                 <img src={update.user.avatarUrl} alt={update.user.name} className="w-12 h-12 rounded-full" />
               </div>

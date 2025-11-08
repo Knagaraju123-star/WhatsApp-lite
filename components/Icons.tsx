@@ -51,7 +51,8 @@ export const CameraIcon: React.FC<IconProps> = (props) => (
 
 export const EndCallIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24" {...props}>
-        <path d="M3.6_12c0-4.6_3.8-8.4_8.4-8.4_1.3_0_2.6.3_3.7_1l-1.5_1.5c-.7-.4-1.5-.7-2.2-.7-3.2_0-5.8_2.6-5.8_5.8_0_1.7.7_3.2_1.9_4.3l-1.5_1.5C4.2_15.8_3.6_14_3.6_12zm13.1_1.9c.5-.7.8-1.6.8-2.5_0-2.3-1.9-4.2-4.2-4.2-.9_0-1.8.3-2.5.8l1.5_1.5c.4-.3.9-.4_1-.4_1.2_0_2.2_1_2.2_2.2_0_.1-.1.6-.4_1l1.5_1.5zM12_3C6.5_3_2_7.5_2_13s4.5_10_10_10_10-4.5_10-10S17.5_3_12_3zm0_18c-4.4_0-8-3.6-8-8s3.6-8_8-8_8_3.6_8_8-3.6_8-8_8z" transform="rotate(135 12 12)"/>
+        {/* FIX: Replaced underscores with spaces in SVG path data. */}
+        <path d="M3.6 12c0-4.6 3.8-8.4 8.4-8.4 1.3 0 2.6.3 3.7 1l-1.5 1.5c-.7-.4-1.5-.7-2.2-.7-3.2 0-5.8 2.6-5.8 5.8 0 1.7.7 3.2 1.9 4.3l-1.5 1.5C4.2 15.8 3.6 14 3.6 12zm13.1 1.9c.5-.7.8-1.6.8-2.5 0-2.3-1.9-4.2-4.2-4.2-.9 0-1.8.3-2.5.8l1.5 1.5c.4-.3.9-.4 1-.4 1.2 0 2.2 1 2.2 2.2 0 .1-.1.6-.4 1l1.5 1.5zM12 3C6.5 3 2 7.5 2 13s4.5 10 10 10 10-4.5 10-10S17.5 3 12 3zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z" transform="rotate(135 12 12)"/>
     </svg>
 );
 
@@ -168,5 +169,15 @@ export const WallpaperIcon: React.FC<IconProps> = (props) => (
 export const ChatHistoryIcon: React.FC<IconProps> = (props) => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" {...props}>
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+);
+
+export const WhatsAppLogoIcon: React.FC<IconProps> = (props) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-green-500" {...props}>
+        {/* FIX: Replaced underscore with space in SVG path data. */}
+        <path d="M21 12.9 21 11c0-5-4-9-9-9s-9 4-9 9 4 9 9 9h.1c1.7 0 3.4-.5 4.9-1.4l4 1.4-1.4-4c.9-1.5 1.4-3.2 1.4-4.9z" />
+        {/* FIX: Corrected invalid '..2' to '-.2' in SVG path data. */}
+        <path d="M16.5 13.5c-.3 1.2-1.8 2.2-3 2.5-1.7.4-3.5-.2-4.7-1.3s-1.7-2.9-1.3-4.7c.4-1.7 2-3 4-3.3 2.2-.3 4.3 1 5 2.8.7 2.1-.5 4.4-2.5 5.2" />
+        <path d="M14.5 9.5c.3-1 0-1.8-.8-2.3s-1.8 0-2.3.8-.5 1.8.3 2.5 1.8 0 2.3-.8" />
     </svg>
 );

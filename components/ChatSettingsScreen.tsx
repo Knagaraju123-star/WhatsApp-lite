@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BackIcon, ThemeIcon, WallpaperIcon, ChatHistoryIcon } from './Icons';
 
